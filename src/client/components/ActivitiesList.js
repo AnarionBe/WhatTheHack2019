@@ -10,6 +10,4 @@ export default function ActivitiesList( props ) {
             />
         <li> );
     } );
-
-    return ( <ul>{events}</ul> );
 }
