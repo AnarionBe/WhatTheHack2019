@@ -11,9 +11,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.resolve(__dirname, "../../bin/client")));
 
 app.all("*", (req, res) => {
-    res.sendFile(__dirname + "../../client/index.html");
+    res.sendFile(`${__dirname}../../client/index.html`);
 });
 
-http.listen(APP_PORT, () =>
+app.listen(APP_PORT, () =>
     console.log(`🚀 Server is listening on port ${APP_PORT}.`),
 );
