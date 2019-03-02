@@ -1,6 +1,6 @@
 # BeCode: WhatTheHack2019
 
-> 🔬 Event manager for your area
+> Event manager for your area
 
 * * *
 
