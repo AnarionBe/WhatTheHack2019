@@ -7,6 +7,8 @@ import ChatList from "./components/ChatList";
 import Settings from "./components/Settings";
 import Register from "./components/Register";
 import Menu from "./components/Menu";
+import Loading from "./components/Loading";
+import Loaded from "./components/Loaded";
 
 export default function App() {
     const [status, setStatus] = React.useState("login");
@@ -68,6 +70,20 @@ export default function App() {
                     user={user}
                     setUser={setUser}
                 />
+            </div>
+        );
+    } else if (status === "loading") {
+        return (
+            <div>
+                <Menu user={user} status={status} />
+                <Loading />
+            </div>
+        );
+    } else if (status === "loaded") {
+        return (
+            <div>
+                <Menu user={user} status={status} />
+                <Loaded />
             </div>
         );
     }

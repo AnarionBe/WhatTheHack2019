@@ -44,9 +44,8 @@ export default function Main(props) {
             })
             .then(response => {
                 console.log(response);
-                // switch component to chatroom with random people
-
-                props.setStatus("chat");
+                // display chatroom
+                props.setState("chat");
             })
             .catch(error => {
                 console.error(error);
