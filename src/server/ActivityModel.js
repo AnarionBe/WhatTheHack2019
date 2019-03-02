@@ -11,9 +11,16 @@ const schema = new mongoose.Schema(
             text: true,
             required: true,
         },
+        locality: {
+            type: String,
+            required: true,
+        },
+        validity: {
+            type: Date,
+            required: true,
+        },
     },
     {collection: "Activity"},
 );
 
 export default mongoose.model("Activity", schema);
-/* title - description - locality - validity */
