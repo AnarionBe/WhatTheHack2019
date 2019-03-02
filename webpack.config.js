@@ -9,9 +9,7 @@
 /* eslint-disable */
 
 const webpack = require("webpack");
-const {
-    resolve
-} = require("path");
+const {resolve} = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = env => {
@@ -55,20 +53,24 @@ module.exports = env => {
 
     return {
         mode: env === "dev" ? "development" : "production",
-        devtool: env === "dev" ?
-            "cheap-module-eval-source-map" :
-            "hidden-source-map",
+        devtool:
+            env === "dev"
+                ? "cheap-module-eval-source-map"
+                : "hidden-source-map",
         context: resolve(__dirname, "./src/client"),
         entry: ["./app.js"],
         module: {
-            rules: [{
+            rules: [
+                {
                     test: /\.(png|jpg|gif)$/,
-                    use: [{
-                        loader: "file-loader",
-                        options: {
-                            name: "[path][name].[ext]",
+                    use: [
+                        {
+                            loader: "file-loader",
+                            options: {
+                                name: "[path][name].[ext]",
+                            },
                         },
-                    }, ],
+                    ],
                 },
 
                 {
@@ -77,43 +79,46 @@ module.exports = env => {
                         "style-loader", // creates style nodes from JS strings
                         "css-loader", // translates CSS into CommonJS
                         "sass-loader", // compiles Sass to CSS, using Node Sass by default
-                    ]
+                        "json-loader",
+                    ],
                 },
                 {
                     test: /\.js$/,
                     exclude: [/node_modules/],
-                    use: [{
-                        loader: "babel-loader",
-                        options: {
-                            cacheDirectory: env === "development",
-                            presets: [
-                                "@babel/preset-env",
-                                "@babel/preset-react",
-                            ],
-                            plugins: [
-                                [
-                                    "@babel/plugin-proposal-decorators",
-                                    {
-                                        legacy: true,
-                                    },
+                    use: [
+                        {
+                            loader: "babel-loader",
+                            options: {
+                                cacheDirectory: env === "development",
+                                presets: [
+                                    "@babel/preset-env",
+                                    "@babel/preset-react",
                                 ],
-                                "@babel/plugin-proposal-object-rest-spread",
-                                [
-                                    "@babel/plugin-proposal-class-properties",
-                                    {
-                                        loose: true,
-                                    },
+                                plugins: [
+                                    [
+                                        "@babel/plugin-proposal-decorators",
+                                        {
+                                            legacy: true,
+                                        },
+                                    ],
+                                    "@babel/plugin-proposal-object-rest-spread",
+                                    [
+                                        "@babel/plugin-proposal-class-properties",
+                                        {
+                                            loose: true,
+                                        },
+                                    ],
                                 ],
-                            ],
+                            },
                         },
-                    }, ],
+                    ],
                 },
             ],
         },
         plugins,
         optimization,
         performance: {
-            hints: false
+            hints: false,
         },
         output: {
             path: resolve(__dirname, "./bin/client"),
@@ -121,6 +126,6 @@ module.exports = env => {
         },
         devServer: {
             historyApiFallback: true,
-            },
+        },
     };
 };
