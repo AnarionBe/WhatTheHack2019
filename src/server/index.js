@@ -12,6 +12,13 @@ import mongoose from "mongoose";
 
 const app = express();
 
+// const rng = (min, max) => {
+//     const mini = Math.ceil(min);
+//     const maxi = Math.floor(max);
+
+//     return Math.floor(Math.random() * (maxi - mini + 1)) + mini;
+// };
+
 mongoose
     .connect("mongodb://dev:dev@mongo:27017/connect?authSource=admin")
     .then(() =>
@@ -145,7 +152,7 @@ app.post("/api/matches", (req, res) => {
                 const newSearch = new Search({
                     email: data.email,
                     age: data.age,
-                    city: req.body.location,
+                    city: req.body.locality,
                     languages: data.languages,
                     typeActivities: req.body.criterias,
                     date: req.body.date,
@@ -160,6 +167,16 @@ app.post("/api/matches", (req, res) => {
         return res.status(200).json(list);
     });
 });
+
+// app.post("/api/rooms", (req, res) => {
+//     const newRoom = new Room({
+//         users: req.body.users,
+//         city: req.body.locality,
+//         // languages: req.body,
+//     });
+
+//     console.log(req);
+// });
 
 app.all("*", (req, res) => {
     res.sendFile(`${__dirname}../../client/index.html`);
