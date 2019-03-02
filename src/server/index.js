@@ -58,6 +58,29 @@ app.post("/api/register", (req, res) => {
     });
 });
 
+app.post("/api/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    User.findOne({email}).then(user => {
+        if (!user) {
+            return res
+                .status(400)
+                .json({email: "The user has not been found!"});
+        }
+
+        bcrypt.compare(password, user.password).then(isMatch => {
+            if (isMatch) {
+                return res.status(201).json(user);
+            }
+
+            return res
+                .status(400)
+                .json({password: "The password is incorrect!"});
+        });
+    });
+});
+
 app.all("*", (req, res) => {
     res.sendFile(`${__dirname}../../client/index.html`);
 });
