@@ -5,8 +5,9 @@ const {APP_PORT} = process.env || 5000;
 
 import bcrypt from "bcryptjs";
 import User from "./UserModel";
+import Activity from "./ActivityModel";
 import mongoose from "mongoose";
-import cors from "cors";
+// import cors from "cors";
 
 const app = express();
 
@@ -18,7 +19,7 @@ mongoose
     .catch(err => console.log(err));
 
 app.use(bodyParser.json());
-app.use(cors);
+// app.use(cors);
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(path.resolve(__dirname, "../../bin/client")));
@@ -83,18 +84,28 @@ app.post("/api/login", (req, res) => {
     });
 });
 
-app.get("api/logout", (req, res) => {
+app.get("/api/logout", (req, res) => {
     res.status(200).json({message: "logged out"});
 });
 
-app.post("api/activity", (req, res) => {
-    console.log(req.body, res);
+app.post("/api/activities", (req, res) => {
+    console.log("test");
+    const newActivity = new Activity({
+        title: req.body.title,
+        description: req.body.description,
+        locality: req.body.locality,
+        validity: req.body.validity,
+    });
+
+    newActivity.save();
+    res.status(200).json(newActivity);
 });
 
 app.all("*", (req, res) => {
     res.sendFile(`${__dirname}../../client/index.html`);
 });
 
-app.listen(APP_PORT, () =>
-    console.log(`🚀 Server is listening on port ${APP_PORT}.`),
-);
+app.listen(APP_PORT, () => {
+    console.log(`🚀 Server is listening on port ${APP_PORT}.`);
+    console.log(new Date());
+});
