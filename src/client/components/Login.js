@@ -1,6 +1,5 @@
 import * as React from "react";
 import axios from "axios";
-import Main from "./Main";
 
 export default function Login(props) {
     let email = "",
@@ -24,7 +23,7 @@ export default function Login(props) {
                 password: password,
             })
             .then(response => {
-                props.setUser(response.user);
+                props.setUser(response);
                 props.setStatus("main");
                 return;
             })
@@ -34,16 +33,13 @@ export default function Login(props) {
             });
     };
 
-    if (props.status === "main") {
-        return (
-            <Main
-                setUser={setUser}
-                setStatus={setStatus}
-                status={status}
-                user={user}
-            />
-        );
-    }
+    const register = event => {
+        event.preventDefault();
+
+        props.setStatus("register");
+        return;
+    };
+
     return (
         <main>
             <form>
@@ -61,6 +57,9 @@ export default function Login(props) {
                 />
                 <button onClick={login}>{"Login"}</button>
             </form>
+            <a href="" onClick={register}>
+                {"Sign up"}
+            </a>
         </main>
     );
 }
