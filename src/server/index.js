@@ -6,6 +6,7 @@ const {APP_PORT} = process.env || 5000;
 import bcrypt from "bcryptjs";
 import User from "./UserModel";
 import Activity from "./ActivityModel";
+import Search from "./SearchModel";
 import mongoose from "mongoose";
 // import cors from "cors";
 
@@ -89,7 +90,6 @@ app.get("/api/logout", (req, res) => {
 });
 
 app.post("/api/activities", (req, res) => {
-    console.log("test");
     const newActivity = new Activity({
         title: req.body.title,
         description: req.body.description,
@@ -101,11 +101,70 @@ app.post("/api/activities", (req, res) => {
     res.status(200).json(newActivity);
 });
 
+app.post("/api/matches", (req, res) => {
+    Search.find({city: req.body.location}, (err, matches) => {
+        if (err) {
+            res.status(400).json({Error: err});
+        }
+
+        if (matches.length === 0) {
+            User.findOne({email: req.body.email}).then(data => {
+                if (!data) {
+                    return res.status(400).json({Error: "User not found"});
+                }
+                const newSearch = new Search({
+                    email: data.email,
+                    age: data.age,
+                    city: req.body.location,
+                    languages: data.languages,
+                    typeActivities: req.body.criterias,
+                    date: req.body.date,
+                });
+
+                newSearch.save();
+                return res.status(200).json(newSearch);
+            });
+
+            return res.status(400).json({Error: "No matches found"});
+        }
+
+        const list = [];
+
+        req.body.languages.forEach(elem => {
+            const index = matches.indexOf(elem);
+
+            if (index >= 0) {
+                list.push(matches[index]);
+            }
+        });
+        if (list.length === 0) {
+            User.findOne({email: req.body.email}).then(data => {
+                if (!data) {
+                    return res.status(400).json({Error: "User not found"});
+                }
+                const newSearch = new Search({
+                    email: data.email,
+                    age: data.age,
+                    city: req.body.location,
+                    languages: data.languages,
+                    typeActivities: req.body.criterias,
+                    date: req.body.date,
+                });
+
+                newSearch.save();
+                return res.status(200).json(newSearch);
+            });
+
+            return res.status(400).json({Error: "No matches found"});
+        }
+        return res.status(200).json(list);
+    });
+});
+
 app.all("*", (req, res) => {
     res.sendFile(`${__dirname}../../client/index.html`);
 });
 
 app.listen(APP_PORT, () => {
     console.log(`🚀 Server is listening on port ${APP_PORT}.`);
-    console.log(new Date());
 });
