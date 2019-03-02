@@ -81,6 +81,10 @@ app.post("/api/login", (req, res) => {
     });
 });
 
+app.get("api/logout", (req, res) => {
+    res.status(200).json({message: "logged out"});
+});
+
 app.all("*", (req, res) => {
     res.sendFile(`${__dirname}../../client/index.html`);
 });
