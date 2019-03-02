@@ -6,6 +6,7 @@ const {APP_PORT} = process.env || 5000;
 import bcrypt from "bcryptjs";
 import User from "./UserModel";
 import mongoose from "mongoose";
+import cors from "cors";
 
 const app = express();
 
@@ -17,6 +18,7 @@ mongoose
     .catch(err => console.log(err));
 
 app.use(bodyParser.json());
+app.use(cors);
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(path.resolve(__dirname, "../../bin/client")));
@@ -83,6 +85,10 @@ app.post("/api/login", (req, res) => {
 
 app.get("api/logout", (req, res) => {
     res.status(200).json({message: "logged out"});
+});
+
+app.post("api/activity", (req, res) => {
+    console.log(req.body, res);
 });
 
 app.all("*", (req, res) => {
